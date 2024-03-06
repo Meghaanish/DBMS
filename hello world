@@ -1,0 +1,15 @@
+
+SQL> set serveroutput on
+SQL>  CREATE OR REPLACE PROCEDURE greetings
+  2    AS
+  3    BEGIN
+  4       dbms_output.put_line('Hello World!');
+  5    END;
+  6    /
+
+Procedure created.
+
+SQL> execute greetings
+Hello World!
+
+PL/SQL procedure successfully completed.
