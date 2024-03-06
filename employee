@@ -1,0 +1,26 @@
+create table Employees(eid int,fname varchar(30),salary int);
+insert into Employees values(100,'ram',30000);
+1 row created.
+ insert into Employees values(101,'sam',4000);
+1 row created.
+declare
+    name varchar(10);
+    sal int(20);
+    begin
+    select fname,salary into name,sal from Employees where eid=100;
+    dbms_output.Put_line('Name:'||name);
+    dbms_output.Put_line('Salary:'||sal);
+    end;
+    /
+ declare
+        name Employees.fname%TYPE;
+        sal Employees.salary%TYPE;
+        lname name%TYPE;
+        begin
+        select fname,salary into name,sal from Employees where eid=100;
+        dbms_output.Put_line('Name:'||name);
+        dbms_output.Put_line('Salary:'||sal);
+        end;
+    /
+Name:ram
+Salary:30000
