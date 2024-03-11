@@ -1,0 +1,19 @@
+PROCEDURE TO PRINT HAI
+
+SQL> set serveroutput on
+SQL> CREATE OR REPLACE PROCEDURE welcome
+  2
+  3  as
+  4  begin
+  5  dbms_output.put_line('Hai!');
+  6  end;
+  7  /
+
+Procedure created.
+
+SQL> execute welcome
+
+OUTPUT
+Hai!
+
+PL/SQL procedure successfully completed.
