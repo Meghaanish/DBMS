@@ -1,0 +1,37 @@
+mysql> use mca;
+Database changed
+mysql> use mca;
+Database changed
+mysql> create user 'megha'@'localhost' identified by 'root1234';
+Query OK, 0 rows affected (0.05 sec)
+mysql> show grants for 'megha'@'localhost';
++--------------------------------------------+
+| Grants for megha@localhost                |
++--------------------------------------------+
+| GRANT USAGE ON *.* TO `megha`@`localhost` |
++--------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> grant all privileges on departments to 'megha'@'localhost';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> revoke all privileges on departments to 'megha'@'localhost';
+
+mysql> revoke all privileges on departments from 'megha'@'localhost
+';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> grant select,update on departments to 'megha'@'localhost';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> revoke update on departments from 'megha'@'localhost';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show grants for 'megha'@'localhost';
++-------------------------------------------------------------+
+| Grants for athira@localhost                                 |
++-------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `megha`@`localhost`                  |
+| GRANT SELECT ON `mca`.`departments` TO `megha`@`localhost` |
++-------------------------------------------------------------+
+2 rows in set (0.00 sec)
