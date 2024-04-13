@@ -1,0 +1,194 @@
+mysql> use mca;
+Database changed
+mysql> create table Employ(e_no int primary key,e_name varchar(255),Job varchar(50),Basic int,DA int,HRA int,PF int,GrossPay int,NetPay int);
+Query OK, 0 rows affected (0.04 sec)
+mysql> insert into Employ values(101,'Devika','Manager',50000,
+15000,20000,8000,90000,80000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Employ values(102,'Kapil','Analyst',25000,1
+2000,16000,4000,75000,70000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Employ values(103,'Ram','Clerk',10000,1000,
+6000,4000,45000,50000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Employ values(104,'Shreya','Manager',50000,
+10000,6000,2000,45000,50000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Employ values(105,'Siya','Analyst',15000,10
+00,3000,5000,45000,35000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> desc Employ;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| e_no     | int          | NO   | PRI | NULL    |       |
+| e_name   | varchar(255) | YES  |     | NULL    |       |
+| Job      | varchar(50)  | YES  |     | NULL    |       |
+| Basic    | int          | YES  |     | NULL    |       |
+| DA       | int          | YES  |     | NULL    |       |
+| HRA      | int          | YES  |     | NULL    |       |
+| PF       | int          | YES  |     | NULL    |       |
+| GrossPay | int          | YES  |     | NULL    |       |
+| NetPay   | int          | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+9 rows in set (0.01 sec)
+
+mysql> select *from Employ;
++------+--------+---------+-------+-------+-------+------+----------+--------+
+| e_no | e_name | Job     | Basic | DA    | HRA   | PF   | GrossPay | NetPay |
++------+--------+---------+-------+-------+-------+------+----------+--------+
+|  101 | Devika | Manager | 50000 | 15000 | 20000 | 8000 |    90000 |  80000 |
+|  102 | Kapil  | Analyst | 25000 | 12000 | 16000 | 4000 |    75000 |  70000 |
+|  103 | Ram    | Clerk   | 10000 |  1000 |  6000 | 4000 |    45000 |  50000 |
+|  104 | Shreya | Manager | 50000 | 10000 |  6000 | 2000 |    45000 |  50000 |
+|  105 | Siya   | Analyst | 15000 |  1000 |  3000 | 5000 |    45000 |  35000 |
++------+--------+---------+-------+-------+-------+------+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> update Employ set GrossPay=Basic+DA+HRA-PF,NetPay=Basic
++DA+HRA-PF;
+Query OK, 5 rows affected (0.01 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+mysql> select *from Employ;
++------+--------+---------+-------+-------+-------+------+----------+--------+
+| e_no | e_name | Job     | Basic | DA    | HRA   | PF   | GrossPay | NetPay |
++------+--------+---------+-------+-------+-------+------+----------+--------+
+|  101 | Devika | Manager | 50000 | 15000 | 20000 | 8000 |    77000 |  77000 |
+|  102 | Kapil  | Analyst | 25000 | 12000 | 16000 | 4000 |    49000 |  49000 |
+|  103 | Ram    | Clerk   | 10000 |  1000 |  6000 | 4000 |    13000 |  13000 |
+|  104 | Shreya | Manager | 50000 | 10000 |  6000 | 2000 |    64000 |  64000 |
+|  105 | Siya   | Analyst | 15000 |  1000 |  3000 | 5000 |    14000 |  14000 |
++------+--------+---------+-------+-------+-------+------+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> update Employ set NetPay=NetPay+1200 where NetPay<20000
+;
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select *from Employ;
++------+--------+---------+-------+-------+-------+------+----------+--------+
+| e_no | e_name | Job     | Basic | DA    | HRA   | PF   | GrossPay | NetPay |
++------+--------+---------+-------+-------+-------+------+----------+--------+
+|  101 | Devika | Manager | 50000 | 15000 | 20000 | 8000 |    77000 |  77000 |
+|  102 | Kapil  | Analyst | 25000 | 12000 | 16000 | 4000 |    49000 |  49000 |
+|  103 | Ram    | Clerk   | 10000 |  1000 |  6000 | 4000 |    13000 |  14200 |
+|  104 | Shreya | Manager | 50000 | 10000 |  6000 | 2000 |    64000 |  64000 |
+|  105 | Siya   | Analyst | 15000 |  1000 |  3000 | 5000 |    14000 |  15200 |
++------+--------+---------+-------+-------+-------+------+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select *from(select *,row_number() over(partition by De
+ptNo order by Basic)as rn from Employ)as ranked where rn=1;
+ERROR 1054 (42S22): Unknown column 'DeptNo' in 'window partition by'
+mysql> alter table Employ add column Deptno varchar(30) not nu
+ll;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select *from Employ;
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+| e_no | e_name | Job     | Basic | DA    | HRA   | PF   | GrossPay | NetPay | Deptno |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+|  101 | Devika | Manager | 50000 | 15000 | 20000 | 8000 |    77000 |  77000 |        |
+|  102 | Kapil  | Analyst | 25000 | 12000 | 16000 | 4000 |    49000 |  49000 |        |
+|  103 | Ram    | Clerk   | 10000 |  1000 |  6000 | 4000 |    13000 |  14200 |        |
+|  104 | Shreya | Manager | 50000 | 10000 |  6000 | 2000 |    64000 |  64000 |        |
+|  105 | Siya   | Analyst | 15000 |  1000 |  3000 | 5000 |    14000 |  15200 |        |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> update Employ set Deptno=1 where e_no=1;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> select *from Employ;
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+| e_no | e_name | Job     | Basic | DA    | HRA   | PF   | GrossPay | NetPay | Deptno |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+|  101 | Devika | Manager | 50000 | 15000 | 20000 | 8000 |    77000 |  77000 |        |
+|  102 | Kapil  | Analyst | 25000 | 12000 | 16000 | 4000 |    49000 |  49000 |        |
+|  103 | Ram    | Clerk   | 10000 |  1000 |  6000 | 4000 |    13000 |  14200 |        |
+|  104 | Shreya | Manager | 50000 | 10000 |  6000 | 2000 |    64000 |  64000 |        |
+|  105 | Siya   | Analyst | 15000 |  1000 |  3000 | 5000 |    14000 |  15200 |        |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> update Employ set Deptno=1 where e_no=101;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from Employ;
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+| e_no | e_name | Job     | Basic | DA    | HRA   | PF   | GrossPay | NetPay | Deptno |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+|  101 | Devika | Manager | 50000 | 15000 | 20000 | 8000 |    77000 |  77000 | 1      |
+|  102 | Kapil  | Analyst | 25000 | 12000 | 16000 | 4000 |    49000 |  49000 |        |
+|  103 | Ram    | Clerk   | 10000 |  1000 |  6000 | 4000 |    13000 |  14200 |        |
+|  104 | Shreya | Manager | 50000 | 10000 |  6000 | 2000 |    64000 |  64000 |        |
+|  105 | Siya   | Analyst | 15000 |  1000 |  3000 | 5000 |    14000 |  15200 |        |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> update Employ set Deptno=2 where e_no=102;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Employ set Deptno=4 where e_no=103;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Employ set Deptno=7 where e_no=104;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Employ set Deptno=2 where e_no=105;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from Employ;
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+| e_no | e_name | Job     | Basic | DA    | HRA   | PF   | GrossPay | NetPay | Deptno |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+|  101 | Devika | Manager | 50000 | 15000 | 20000 | 8000 |    77000 |  77000 | 1      |
+|  102 | Kapil  | Analyst | 25000 | 12000 | 16000 | 4000 |    49000 |  49000 | 2      |
+|  103 | Ram    | Clerk   | 10000 |  1000 |  6000 | 4000 |    13000 |  14200 | 4      |
+|  104 | Shreya | Manager | 50000 | 10000 |  6000 | 2000 |    64000 |  64000 | 7      |
+|  105 | Siya   | Analyst | 15000 |  1000 |  3000 | 5000 |    14000 |  15200 | 2      |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select *from(select *,row_number() over(partition by DeptNo order by Basic)as rn from Employ)as ranked where rn=1;
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+----+
+| e_no | e_name | Job     | Basic | DA    | HRA   | PF   | GrossPay | NetPay | Deptno | rn |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+----+
+|  101 | Devika | Manager | 50000 | 15000 | 20000 | 8000 |    77000 |  77000 | 1      |  1 |
+|  105 | Siya   | Analyst | 15000 |  1000 |  3000 | 5000 |    14000 |  15200 | 2      |  1 |
+|  103 | Ram    | Clerk   | 10000 |  1000 |  6000 | 4000 |    13000 |  14200 | 4      |  1 |
+|  104 | Shreya | Manager | 50000 | 10000 |  6000 | 2000 |    64000 |  64000 | 7      |  1 |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+----+
+4 rows in set (0.01 sec)
+
+mysql> select *from Employ where GrossPay between 10000 and 20000;
++------+--------+---------+-------+------+------+------+----------+--------+--------+
+| e_no | e_name | Job     | Basic | DA   | HRA  | PF   | GrossPay | NetPay | Deptno |
++------+--------+---------+-------+------+------+------+----------+--------+--------+
+|  103 | Ram    | Clerk   | 10000 | 1000 | 6000 | 4000 |    13000 |  14200 | 4      |
+|  105 | Siya   | Analyst | 15000 | 1000 | 3000 | 5000 |    14000 |  15200 | 2      |
++------+--------+---------+-------+------+------+------+----------+--------+--------+
+2 rows in set (0.01 sec)
+
+mysql> select* from Employ where GrossPay=(select max(GrossPay)from Empl
+oy);
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+| e_no | e_name | Job     | Basic | DA    | HRA   | PF   | GrossPay | NetPay | Deptno |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+|  101 | Devika | Manager | 50000 | 15000 | 20000 | 8000 |    77000 |  77000 | 1      |
++------+--------+---------+-------+-------+-------+------+----------+--------+--------+
+1 row in set (0.01 sec)
