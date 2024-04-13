@@ -1,0 +1,129 @@
+mysql> use mca;
+Database changed
+
+mysql> create table Emp1(empno int primary key,ename varchar(255),job varchar(255),mgr int,hiredate date,sal int,comm int,deptno int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table Dept1(deptno int primary key,dname varchar(255),loc varchar(255));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into Emp1 values(101,'Ajith','Manager',null,'1990-05-15',50000,null,1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Emp1 values(102,'Shreya','Developer',101,'2001-02-20',60000,null,2);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Emp1 values(103,'Kavitha','Salesperson',101,'2015-08-10',45000,2000,3);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Emp1 values(104,'Mithun','Analyst',102,'2018-10-30',70000,null,2);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Dept1 values(1,'HR','Mumbai');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Dept1 values(2,'IT','Hyderabad');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Dept1 values(3,'Sales','Kerala');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Dept1 values(4,'Finance','Bangladesh');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> desc Emp1;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| empno    | int          | NO   | PRI | NULL    |       |
+| ename    | varchar(255) | YES  |     | NULL    |       |
+| job      | varchar(255) | YES  |     | NULL    |       |
+| mgr      | int          | YES  |     | NULL    |       |
+| hiredate | date         | YES  |     | NULL    |       |
+| sal      | int          | YES  |     | NULL    |       |
+| comm     | int          | YES  |     | NULL    |       |
+| deptno   | int          | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+8 rows in set (0.01 sec)
+
+mysql> desc Dept1;
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| deptno | int          | NO   | PRI | NULL    |       |
+| dname  | varchar(255) | YES  |     | NULL    |       |
+| loc    | varchar(255) | YES  |     | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> select *from Emp1;
++-------+---------+-------------+------+------------+-------+------+--------+
+| empno | ename   | job         | mgr  | hiredate   | sal   | comm | deptno |
++-------+---------+-------------+------+------------+-------+------+--------+
+|   101 | Ajith   | Manager     | NULL | 1990-05-15 | 50000 | NULL |      1 |
+|   102 | Shreya  | Developer   |  101 | 2001-02-20 | 60000 | NULL |      2 |
+|   103 | Kavitha | Salesperson |  101 | 2015-08-10 | 45000 | 2000 |      3 |
+|   104 | Mithun  | Analyst     |  102 | 2018-10-30 | 70000 | NULL |      2 |
++-------+---------+-------------+------+------------+-------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select *from Dept1;
++--------+---------+------------+
+| deptno | dname   | loc        |
++--------+---------+------------+
+|      1 | HR      | Mumbai     |
+|      2 | IT      | Hyderabad  |
+|      3 | Sales   | Kerala     |
+|      4 | Finance | Bangladesh |
++--------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> update Emp1 set sal=sal*1.15 where hiredate<curdate()-interval 10 year;
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select *from Emp1;
++-------+---------+-------------+------+------------+-------+------+--------+
+| empno | ename   | job         | mgr  | hiredate   | sal   | comm | deptno |
++-------+---------+-------------+------+------------+-------+------+--------+
+|   101 | Ajith   | Manager     | NULL | 1990-05-15 | 57500 | NULL |      1 |
+|   102 | Shreya  | Developer   |  101 | 2001-02-20 | 69000 | NULL |      2 |
+|   103 | Kavitha | Salesperson |  101 | 2015-08-10 | 45000 | 2000 |      3 |
+|   104 | Mithun  | Analyst     |  102 | 2018-10-30 | 70000 | NULL |      2 |
++-------+---------+-------------+------+------------+-------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> delete from Emp1 where hiredate<curdate()-interval 30 year;
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select *from Emp1;
++-------+---------+-------------+------+------------+-------+------+--------+
+| empno | ename   | job         | mgr  | hiredate   | sal   | comm | deptno |
++-------+---------+-------------+------+------------+-------+------+--------+
+|   102 | Shreya  | Developer   |  101 | 2001-02-20 | 69000 | NULL |      2 |
+|   103 | Kavitha | Salesperson |  101 | 2015-08-10 | 45000 | 2000 |      3 |
+|   104 | Mithun  | Analyst     |  102 | 2018-10-30 | 70000 | NULL |      2 |
++-------+---------+-------------+------+------------+-------+------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select mgr,count(*)as num_employees from Emp1 group by mgr order by num_employees desc limit 1;
++------+---------------+
+| mgr  | num_employees |
++------+---------------+
+|  101 |             2 |
++------+---------------+
+1 row in set (0.00 sec)
+
+mysql> create view EmployeeManagerView as select e.ename as employee_name,m.ename as manager_name from Emp1 e left join Emp1 m on e.mgr=m.empno;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select *from Emp1;
++-------+---------+-------------+------+------------+-------+------+--------+
+| empno | ename   | job         | mgr  | hiredate   | sal   | comm | deptno |
++-------+---------+-------------+------+------------+-------+------+--------+
+|   102 | Shreya  | Developer   |  101 | 2001-02-20 | 69000 | NULL |      2 |
+|   103 | Kavitha | Salesperson |  101 | 2015-08-10 | 45000 | 2000 |      3 |
+|   104 | Mithun  | Analyst     |  102 | 2018-10-30 | 70000 | NULL |      2 |
++-------+---------+-------------+------+------------+-------+------+--------+
+3 rows in set (0.00 sec)
